@@ -1,0 +1,173 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L TEENSY_4.0:TEENSY_4.0 IC1
+U 1 1 6201E9AA
+P 6450 2650
+F 0 "IC1" V 7454 2778 50  0000 L CNN
+F 1 "TEENSY_4.0" V 7545 2778 50  0000 L CNN
+F 2 "TEENSY_4.0:TEENSY40" H 8400 2750 50  0001 L CNN
+F 3 "https://www.pjrc.com/store/teensy40.html" H 8400 2650 50  0001 L CNN
+F 4 "Teensy USB Board, Version 4.0" H 8400 2550 50  0001 L CNN "Description"
+F 5 "4.64" H 8400 2450 50  0001 L CNN "Height"
+F 6 "Teensy" H 8400 2350 50  0001 L CNN "Manufacturer_Name"
+F 7 "TEENSY 4.0" H 8400 2250 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 8400 2150 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 8400 2050 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 8400 1950 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 8400 1850 50  0001 L CNN "Arrow Price/Stock"
+	1    6450 2650
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J1
+U 1 1 620203FF
+P 5350 5800
+F 0 "J1" V 5412 5944 50  0000 L CNN
+F 1 "eye_left" V 5503 5944 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 5350 5800 50  0001 C CNN
+F 3 "~" H 5350 5800 50  0001 C CNN
+	1    5350 5800
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J2
+U 1 1 6202261F
+P 5500 1400
+F 0 "J2" V 5562 1544 50  0000 L CNN
+F 1 "eye_left" V 5653 1544 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal" H 5500 1400 50  0001 C CNN
+F 3 "~" H 5500 1400 50  0001 C CNN
+	1    5500 1400
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+3.3V #PWR0101
+U 1 1 62023E82
+P 5400 1850
+F 0 "#PWR0101" H 5400 1700 50  0001 C CNN
+F 1 "+3.3V" H 5415 2023 50  0000 C CNN
+F 2 "" H 5400 1850 50  0001 C CNN
+F 3 "" H 5400 1850 50  0001 C CNN
+	1    5400 1850
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+3.3V #PWR0102
+U 1 1 6202470D
+P 5450 5450
+F 0 "#PWR0102" H 5450 5300 50  0001 C CNN
+F 1 "+3.3V" H 5465 5623 50  0000 C CNN
+F 2 "" H 5450 5450 50  0001 C CNN
+F 3 "" H 5450 5450 50  0001 C CNN
+	1    5450 5450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5400 1850 5400 1600
+Wire Wire Line
+	5450 5600 5450 5450
+$Comp
+L power:+3.3V #PWR0103
+U 1 1 6202DBAD
+P 4950 2400
+F 0 "#PWR0103" H 4950 2250 50  0001 C CNN
+F 1 "+3.3V" H 4965 2573 50  0000 C CNN
+F 2 "" H 4950 2400 50  0001 C CNN
+F 3 "" H 4950 2400 50  0001 C CNN
+	1    4950 2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4950 2400 4950 2650
+$Comp
+L power:GND #PWR0104
+U 1 1 6202E7CF
+P 4600 2450
+F 0 "#PWR0104" H 4600 2200 50  0001 C CNN
+F 1 "GND" V 4605 2322 50  0000 R CNN
+F 2 "" H 4600 2450 50  0001 C CNN
+F 3 "" H 4600 2450 50  0001 C CNN
+	1    4600 2450
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4850 2650 4850 2450
+Wire Wire Line
+	4850 2450 4600 2450
+$Comp
+L power:GND #PWR0105
+U 1 1 6202F17F
+P 5050 1800
+F 0 "#PWR0105" H 5050 1550 50  0001 C CNN
+F 1 "GND" H 5055 1627 50  0000 C CNN
+F 2 "" H 5050 1800 50  0001 C CNN
+F 3 "" H 5050 1800 50  0001 C CNN
+	1    5050 1800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5050 1800 5050 1600
+Wire Wire Line
+	5050 1600 5300 1600
+$Comp
+L power:GND #PWR0106
+U 1 1 620301AF
+P 5850 5450
+F 0 "#PWR0106" H 5850 5200 50  0001 C CNN
+F 1 "GND" H 5855 5277 50  0000 C CNN
+F 2 "" H 5850 5450 50  0001 C CNN
+F 3 "" H 5850 5450 50  0001 C CNN
+	1    5850 5450
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	5550 5600 5550 5450
+Wire Wire Line
+	5550 5450 5850 5450
+Wire Wire Line
+	5600 1600 5600 2100
+Wire Wire Line
+	5600 2100 4350 2100
+Wire Wire Line
+	4350 2100 4350 4950
+Wire Wire Line
+	4350 4950 5750 4950
+Wire Wire Line
+	5750 4950 5750 4750
+Wire Wire Line
+	5500 1600 5500 2150
+Wire Wire Line
+	5500 2150 4300 2150
+Wire Wire Line
+	4300 2150 4300 4900
+Wire Wire Line
+	4300 4900 5650 4900
+Wire Wire Line
+	5650 4900 5650 4750
+Wire Wire Line
+	5250 5600 5250 5050
+Wire Wire Line
+	5250 5050 5850 5050
+Wire Wire Line
+	5850 5050 5850 4750
+Wire Wire Line
+	5350 5600 5350 5150
+Wire Wire Line
+	5350 5150 5950 5150
+Wire Wire Line
+	5950 5150 5950 4750
+$EndSCHEMATC

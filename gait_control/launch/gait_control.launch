@@ -1,0 +1,33 @@
+<launch>
+    <param name="robot_name"  value="catbot" />
+
+    <arg name="model" default ="$(find catbot_description)/urdf/catbot.urdf"/>
+    <param name="robot_description" textfile="$(arg model)" />
+
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+		<remap from="joint_states" to="/catbot/joints_control" />
+		<param name="rate" value="100"/>
+	</node>
+
+
+    <include file="$(find catbot_calibration)/launch/connect_teensy.launch" />
+
+    <node pkg="catbot_calibration" type="set_calibration_node.py" name="set_calibration" output = "screen" />
+
+
+
+    <param name="urdf_path"  value="$(find catbot_description)/urdf/catbot.urdf" />
+    <!--<node name="gait_control" pkg="gait_control" type="gait_control" output = "screen"/>-->
+
+
+
+
+
+	<node name="gamepad_controller" pkg="catbot_visualization" type="xbox_controller_node.py" output = "screen"/>
+	<!--<node name="catbot_camera" pkg="catbot_vision" type="publish_camera_view_node.py"/>-->
+    <include file="$(find catbot_lidar)/launch/X2L.launch" />
+
+
+
+</launch>

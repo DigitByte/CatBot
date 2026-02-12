@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name catbot)(type KiCad)(uri /home/andres/androtics-lab/src/catbot/electronics/footprint_library)(options "")(descr ""))
+)

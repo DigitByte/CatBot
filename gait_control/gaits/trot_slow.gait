@@ -1,0 +1,103 @@
+[gait settings]
+walk           = 1
+gait_period_min    = 1
+gait_period_max    = 1
+prop_swing_time = 0.3
+fl_phase_offset = 0.0
+fr_phase_offset = 0.5
+bl_phase_offset = 0.25
+br_phase_offset = 0.75
+max_xy_vel = 0.1
+max_th_vel = 0.1
+
+[Feet and base settings]
+feet_offset_x         = 0.0
+feet_offset_y         = 0.04
+base_offset_x         = 0.015
+base_offset_y         = 0.0
+step_height           = 0.09
+force_contact_threshold = 0
+capture_point_velocity_factor = 0
+min_prop_swing_time_before_contact_detection = 1
+dt_contact_detection_seconds = 0.02
+
+
+
+
+[Predictive support polygon settings]
+factor_predictive_support_polygon = 15
+wfactor_stance_sigma1  = 0.6
+wfactor_stance_sigma2  = 0.6
+wfactor_swing_sigma1   = 0.1
+wfactor_swing_sigma2   = 0.1
+wfactor_offset         = 0.7
+
+[Control settings]
+max_abs_vel_x     = 0.15
+max_abs_vel_y     = 0.07
+max_abs_vel_z     = 0.05
+max_abs_vel_roll  = 1
+max_abs_vel_pitch = 1
+max_abs_vel_yaw   = 0.8
+filter_vel_cmd_factor = 0.7
+filter_estimated_vel_factor = 0.7
+linear_vel_th_to_walk = -0.1
+linear_ang_vel_th_to_walk = 0.05
+
+[Force controller settings]
+enable_force_controller = 1
+force_controller_k_base_position_x = 1
+force_controller_k_base_position_y = 1
+force_controller_k_base_position_z = 0.0
+
+force_controller_k_base_velocity_x = 1
+force_controller_k_base_velocity_y = 1
+force_controller_k_base_velocity_z = 0.0
+
+force_controller_k_base_angles_x   = 0.0
+force_controller_k_base_angles_y   = 0.0
+force_controller_k_base_angles_z   = 0.0
+
+force_controller_k_base_angular_vel_x = 0
+force_controller_k_base_angular_vel_y = 0
+force_controller_k_base_angular_vel_z = 1
+
+force_controller_dynamical_model_weight = 1
+force_controller_regularization_weight  = 0.1
+force_controller_prev_force_weight      = 0.001
+force_controller_min_force = 0
+force_controller_max_force = 500
+
+
+
+
+
+
+[Predictive Model controller settings]
+enable_pmc_controller = 0
+
+horizon = 3
+deltat  = 0.05
+
+
+pmc_controller_w_base_position_x = 1
+pmc_controller_w_base_position_y = 1
+pmc_controller_w_base_position_z = 0
+
+pmc_controller_w_base_angles_x   = 0.1
+pmc_controller_w_base_angles_y   = 0.1
+pmc_controller_w_base_angles_z   = 0
+
+pmc_controller_w_base_vel_x      = 0.1
+pmc_controller_w_base_vel_y      = 0.1
+pmc_controller_w_base_vel_z      = 0.0
+
+pmc_controller_w_base_ang_vel_x  = 0.001
+pmc_controller_w_base_ang_vel_y  = 0.001
+pmc_controller_w_base_ang_vel_z  = 1
+
+pmc_controller_w_forces          = 0.001
+
+pmc_controller_min_force = -10000
+pmc_controller_max_force = 10000
+pmc_max_feet_vel         = 0.3

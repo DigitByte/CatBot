@@ -1,0 +1,13 @@
+<launch>
+
+
+  <include file="$(find catbot_calibration)/launch/connect_teensy.launch" />
+
+
+
+    <node pkg="catbot_calibration" type="servo_calibration_node.py" name="calibration" output="screen"/>
+
+
+
+
+</launch>

@@ -1,0 +1,17 @@
+# CAD / mesh sources (replace before publishing hardware files)
+*.stl
+*.blend
+*.blend1
+*.step
+*.stp
+*.iges
+*.igs
+
+# CAD exports (optional)
+*.3mf
+*.dxf
+*.dwg
+*.obj
+
+# macOS
+.DS_Store

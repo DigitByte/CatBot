@@ -1,0 +1,658 @@
+void PredictiveModeController::computeForces(double current_main_phase){
+    Matrix13f    Adyn;
+    Matrix13x12f Bdyn;
+
+    Eigen::Vector3f ref_base_ang, ref_base_pos, ref_base_ang_vel, ref_base_vel;
+    Eigen::Vector3f feet_pos_fl, feet_pos_fr, feet_pos_bl, feet_pos_br;
+    Eigen::Vector3f feet_pos_fl_fromBase, feet_pos_fr_fromBase, feet_pos_bl_fromBase, feet_pos_br_fromBase;
+
+    bool stance_fl, stance_fr, stance_bl, stance_br;
+    int num_stance_feet, num_stance_feet_k0, offset_feet;
+
+    // Big matrices for QP optimisation
+    Eigen::MatrixXf Aqp(HORIZONT_K * DYN_STATE_DIM, DYN_STATE_DIM);
+    Eigen::MatrixXf Bqp(HORIZONT_K * DYN_STATE_DIM, 0);
+    Eigen::MatrixXf Cqp(0, 0);
+    Eigen::MatrixXf D_MINqp(0, 1);
+    Eigen::MatrixXf D_MAXqp(0, 1);
+
+
+
+
+    // Get first mean yaw angle
+    float mean_yaw = 0;
+    for(int k=0; k<HORIZONT_K; k++) {
+        ref_base_ang     << this->state_ref(13*k),    this->state_ref(13*k + 1),  this->state_ref(13*k + 2);
+        mean_yaw +=  ref_base_ang.z();
+    }
+    mean_yaw = mean_yaw/HORIZONT_K;
+
+    // Get first Adyn
+    this->getAdynMatrix(mean_yaw, DELTAT, &Adyn);
+
+    int forces_counter = 0;
+    for(int k=0; k<HORIZONT_K; k++) {
+        ref_base_ang     << this->state_ref(13*k),    this->state_ref(13*k + 1),  this->state_ref(13*k + 2);
+        ref_base_pos     << this->state_ref(13*k+3),  this->state_ref(13*k + 4),  this->state_ref(13*k + 5);
+        ref_base_ang_vel << this->state_ref(13*k+6),  this->state_ref(13*k + 7),  this->state_ref(13*k + 8);
+        ref_base_vel     << this->state_ref(13*k+9),  this->state_ref(13*k + 10), this->state_ref(13*k + 11);
+
+
+        //std::cout << k << ": " << ref_base_pos.x() << " " << ref_base_pos.y() << " " << ref_base_pos.z() << std::endl;
+
+
+        stance_fl = this->fl_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_fl);
+        stance_fr = this->fr_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_fr);
+        stance_bl = this->bl_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_bl);
+        stance_br = this->br_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_br);
+
+        this->kinematics->getFeetFromBody("fl", feet_pos_fl, &feet_pos_fl_fromBase);
+        this->kinematics->getFeetFromBody("fr", feet_pos_fr, &feet_pos_fr_fromBase);
+        this->kinematics->getFeetFromBody("bl", feet_pos_bl, &feet_pos_bl_fromBase);
+        this->kinematics->getFeetFromBody("br", feet_pos_br, &feet_pos_br_fromBase);
+
+
+        feet_pos_fl_fromBase = feet_pos_fl_fromBase + ref_base_pos;
+        feet_pos_fr_fromBase = feet_pos_fr_fromBase + ref_base_pos;
+        feet_pos_bl_fromBase = feet_pos_bl_fromBase + ref_base_pos;
+        feet_pos_br_fromBase = feet_pos_br_fromBase + ref_base_pos;
+
+        feet_pos_fl_fromBase(2) = 0;
+        feet_pos_fr_fromBase(2) = 0;
+        feet_pos_bl_fromBase(2) = 0;
+        feet_pos_br_fromBase(2) = 0;
+
+        //std::cout << feet_pos_fl_fromBase.x() << " " << feet_pos_fl_fromBase.y() << " " << feet_pos_fl_fromBase.z() << std::endl;
+        //std::cout << feet_pos_fr_fromBase.x() << " " << feet_pos_fr_fromBase.y() << " " << feet_pos_fr_fromBase.z() << std::endl;
+        //std::cout << feet_pos_bl_fromBase.x() << " " << feet_pos_bl_fromBase.y() << " " << feet_pos_bl_fromBase.z() << std::endl;
+        //std::cout << feet_pos_br_fromBase.x() << " " << feet_pos_br_fromBase.y() << " " << feet_pos_br_fromBase.z() << std::endl;
+
+
+        num_stance_feet = stance_fl + stance_fr + stance_bl + stance_br;
+        if (k == 0){
+            num_stance_feet_k0 = num_stance_feet;
+            this->stance_fl = stance_fl;
+            this->stance_fr = stance_fr;
+            this->stance_bl = stance_bl;
+            this->stance_br = stance_br;
+        }
+
+        float yaw = ref_base_ang.z();
+
+        this->getBdynMatrix(yaw, DELTAT, feet_pos_fl_fromBase, feet_pos_fr_fromBase, feet_pos_bl_fromBase, feet_pos_br_fromBase, &Bdyn);
+
+
+        /*********** GET ALL THE MATRICES FOR THE STANCE FEETS******************/
+
+        Eigen::MatrixXf D_MIN(num_stance_feet*5, 1);
+        Eigen::MatrixXf D_MAX(num_stance_feet*5, 1);
+        Eigen::MatrixXf C(num_stance_feet*5, num_stance_feet*3);
+        C.setZero();
+
+        Eigen::MatrixXf Bdyn_red(DYN_STATE_DIM, 3 * num_stance_feet);
+
+
+        // Block starting at (i,j) of size (p,q) -----> matrix.block(i,j,p,q);
+        offset_feet = 0;
+        //std::cout << "stance feet " << num_stance_feet << " " << stance_fl <<  stance_fr << stance_bl <<  stance_br << std::endl;
+        if(stance_fl){
+            //std::cout << "FL feet_offset " << offset_feet << std::endl;
+            C.block(5*offset_feet, 3*offset_feet, 5, 3) = this->terrain_fl;
+            D_MIN.block(5*offset_feet,0, 5, 1)          = this->d_min;
+            D_MAX.block(5*offset_feet,0, 5, 1)          = this->d_max;
+
+            Bdyn_red.block(0, 3*offset_feet, DYN_STATE_DIM, 3) = Bdyn.block(0,0, DYN_STATE_DIM, 3);
+            offset_feet += 1;
+        }
+
+
+        if(stance_fr){
+            //std::cout << "FR feet_offset " << offset_feet << std::endl;
+            C.block(5*offset_feet, 3*offset_feet, 5, 3) = this->terrain_fr;
+            D_MIN.block(5*offset_feet,0, 5, 1)          = this->d_min;
+            D_MAX.block(5*offset_feet,0, 5, 1)          = this->d_max;
+
+            Bdyn_red.block(0, 3*offset_feet, DYN_STATE_DIM, 3) = Bdyn.block(0,3, DYN_STATE_DIM, 3);
+            offset_feet += 1;
+        }
+
+        if(stance_bl){
+            //std::cout << "BL feet_offset " << offset_feet << std::endl;
+            C.block(5*offset_feet, 3*offset_feet, 5, 3) = this->terrain_bl;
+            D_MIN.block(5*offset_feet,0, 5, 1)          = this->d_min;
+            D_MAX.block(5*offset_feet,0, 5, 1)          = this->d_max;
+
+            Bdyn_red.block(0, 3*offset_feet, DYN_STATE_DIM, 3) = Bdyn.block(0,6, DYN_STATE_DIM, 3);
+            offset_feet += 1;
+        }
+
+        if(stance_br){
+            C.block(5*offset_feet, 3*offset_feet, 5, 3) = this->terrain_br;
+            D_MIN.block(5*offset_feet,0, 5, 1)          = this->d_min;
+            D_MAX.block(5*offset_feet,0, 5, 1)          = this->d_max;
+
+            Bdyn_red.block(0, 3*offset_feet, DYN_STATE_DIM, 3) = Bdyn.block(0,9, DYN_STATE_DIM, 3);
+            offset_feet += 1;
+        }
+
+
+        /**************** GET MATRICES FOR QP *********************/
+        Aqp.block(k*DYN_STATE_DIM, 0, DYN_STATE_DIM, DYN_STATE_DIM) = Adyn.pow(k+1);
+
+
+        Bqp.conservativeResize(Eigen::NoChange, Bqp.cols() + 3 * num_stance_feet);
+        Bqp.block(0, 3 * forces_counter, DYN_STATE_DIM* HORIZONT_K, 3 * num_stance_feet).setZero();
+
+        for (int j=0; j < HORIZONT_K; j ++){
+
+            if(j == k){
+                Bqp.block(j*DYN_STATE_DIM, 3 * forces_counter, DYN_STATE_DIM, 3 * num_stance_feet) = Bdyn_red;
+            }
+            if (j > k){
+                Bqp.block(j*DYN_STATE_DIM, 3 * forces_counter, DYN_STATE_DIM, 3 * num_stance_feet) = Adyn.pow(j-k) * Bdyn_red;
+                //Bqp.block(j*DYN_STATE_DIM, 3 * forces_counter, DYN_STATE_DIM, 3 * num_stance_feet) = Adyn.pow(j-k) * Bdyn_red;
+            }
+        }
+
+
+
+        //for(int i=0; i < num_stance_feet*5; i++){
+        //   for(int j=0; j < num_stance_feet*3; j++){
+        //        std::cout << C(i,j) << " ";
+        //    }
+        //    std::cout << std::endl;
+        //}
+        //std::cout << std::endl;
+
+
+
+        Cqp.conservativeResize(Cqp.rows() + 5*num_stance_feet, Cqp.cols() + 3*num_stance_feet);
+        Cqp.block(5*forces_counter, 3*forces_counter, 5*num_stance_feet, 3*num_stance_feet) = C;
+
+        D_MINqp.conservativeResize(D_MINqp.rows() + 5*num_stance_feet, Eigen::NoChange);
+        D_MAXqp.conservativeResize(D_MAXqp.rows() + 5*num_stance_feet, Eigen::NoChange);
+
+        D_MINqp.block(5*forces_counter, 0, 5*num_stance_feet, 1) = D_MIN;
+        D_MAXqp.block(5*forces_counter, 0, 5*num_stance_feet, 1) = D_MAX;
+
+        forces_counter += num_stance_feet;
+    }
+
+
+
+
+    Eigen::MatrixXf predicted_state(HORIZONT_K * DYN_STATE_DIM,1);
+    Eigen::MatrixXf computed_forces(3*forces_counter,1);
+    for (int i=0; i < forces_counter; i++){
+        computed_forces(i*3 + 2) = 9.8*ROBOT_TOTAL_MASS/forces_counter;
+    }
+    //computed_forces.setZero();
+    predicted_state = Aqp * this->initial_state + Bqp * computed_forces;
+
+    for (int k=0; k < HORIZONT_K; k++){
+        ref_base_pos     << predicted_state(13*k+3),  predicted_state(13*k + 4),  predicted_state(13*k + 5);
+        ref_base_vel     << predicted_state(13*k+9),  predicted_state(13*k + 10), predicted_state(13*k + 11);
+
+        std::cout << k << ": " << ref_base_vel.x() << " " << ref_base_vel.y() << " " << ref_base_vel.z() << std::endl;
+    }
+
+    std::cout << "-------------------------------" << std::endl;
+    */
+
+
+    /****************** QP ***********************/
+    Eigen::MatrixXd Q(forces_counter*3, forces_counter*3);
+    Eigen::VectorXd q( 3* forces_counter);
+
+
+
+
+
+
+    Q = 1*( (Bqp.transpose().cast<double>() * Bqp.cast<double>()) * this->w_dyn_model
+            +  Eigen::MatrixXd::Identity(3* forces_counter, 3* forces_counter) *this->w_forces);
+
+
+    q =  1* (Bqp.transpose().cast<double>()*this->w_dyn_model) * ( Aqp.cast<double>() * this->initial_state.cast<double>() - this->state_ref.cast<double>() );
+
+    //Q =  (Bqp.transpose().cast<double>() * Bqp.cast<double>()) * this->w_dyn_model
+    //        +  Eigen::MatrixXd::Identity(3* forces_counter, 3* forces_counter) *this->w_forces;
+
+    //q =  1* (Bqp.transpose().cast<double>()) * ( this->w_dyn_model*Aqp.cast<double>() * this->initial_state.cast<double>() - this->state_ref.cast<double>() );
+
+
+
+
+    /*
+    std::cout << "------------" << std::endl;
+    for (int i=0; i < forces_counter*3; i++){
+        for (int j=0; j < forces_counter*3; j++) {
+
+            std::cout << Q(i,j) << ", ";
+        }
+        std::cout << std::endl;
+    }
+
+
+    std::cout << "------------" << std::endl;
+    for (int j=0; j < forces_counter*3; j++) {
+
+        std::cout << q(j) << ", ";
+    }
+    std::cout << "------------" << std::endl;
+    */
+
+    /*
+
+    Eigen::MatrixXd Cd_comp(2*forces_counter*5, forces_counter*3);
+    Eigen::VectorXd D_comp(2*forces_counter*5);
+
+
+    Cd_comp << Cqp.cast<double>(), -Cqp.cast<double>();
+    D_comp  << -D_MINqp.cast<double>(), D_MAXqp.cast<double>();
+
+
+
+
+    // Empty equality equations
+    Eigen::MatrixXd CE(3*forces_counter, 0);
+    Eigen::VectorXd ce(0);
+
+    Eigen::VectorXd forces(3*forces_counter);
+
+
+    QuadProgPP::solve_quadprog(Q,
+                               q,
+                               CE,
+                               ce,
+                               Cd_comp.transpose(), //
+                               D_comp,// D_MAXd,//
+                               forces);
+
+    QuadProgPP::solve_quadprog_with_guess(Q,
+                                          q,
+                                          CE,
+                                          ce,
+                                          Cd_comp.transpose(), //
+                                          D_comp,// D_MAXd,//
+                                          forces);
+    */
+    /****************************************************/
+
+
+    Eigen::MatrixXd Cqp_double(forces_counter*5, forces_counter*3);
+    Eigen::VectorXd D_MIN_double(forces_counter*5);
+    Eigen::VectorXd D_MAX_double(forces_counter*5);
+
+    Cqp_double = Cqp.cast<double>();
+    D_MIN_double = D_MINqp.cast<double>();
+    D_MAX_double = D_MAXqp.cast<double>();
+
+    Eigen::VectorXd MIN_FORCE(forces_counter*3);
+    Eigen::VectorXd MAX_FORCE(forces_counter*3);
+    MIN_FORCE.fill(0);
+    MAX_FORCE.fill(60);
+
+    USING_NAMESPACE_QPOASES
+    SQProblem solve_qp(3*forces_counter, forces_counter*5);
+    const real_t* H = Q.data();
+    const real_t* g = q.data();
+    const real_t* A =   Cqp_double.data();
+    const real_t* lbA = D_MIN_double.data();
+    const real_t* ubA = D_MAX_double.data();
+    const real_t* lb = NULL; //MIN_FORCE.data();
+    const real_t* ub = NULL; //MAX_FORCE.data();
+
+
+    int nWSR = 100;
+
+    returnValue hr;
+
+    hr = solve_qp.init(H,
+                       g,
+                       A,
+                       lb,
+                       ub,
+                       lbA,
+                       ubA,
+                       nWSR);
+
+
+    hr = solve_qp.hotstart(H,
+                       g,
+                       A,
+                       lb,
+                       ub,
+                       lbA,
+                       ubA,
+                       nWSR);
+
+    std::cout << "RETURN VAL " << hr << std::endl;
+
+    real_t xOpt[3*forces_counter];
+    solve_qp.getPrimalSolution( xOpt );
+
+    if(hr == 0){
+        std::cout << "FORCES" << std::endl;
+
+        for (int i=0; i <forces_counter; i++){
+            std::cout << xOpt[3*i] << ", " << xOpt[3*i + 1] << ", " << xOpt[3*i + 2] << std::endl;
+        }
+        std::cout << "-----------------------" <<  std::endl;
+    }
+
+
+    /*****************************************************/
+
+    /*
+    this->curr_forces.setZero();
+    offset_feet = 0;
+    if (this->stance_fl){
+        this->curr_forces.operator()(0) = forces.operator()(3*offset_feet + 0);
+        this->curr_forces.operator()(1) = forces.operator()(3*offset_feet + 1);
+        this->curr_forces.operator()(2) = forces.operator()(3*offset_feet + 2);
+        offset_feet += 1;
+    }
+
+    if(this->stance_fr){
+        this->curr_forces.operator()(3) = forces.operator()(3*offset_feet + 0);
+        this->curr_forces.operator()(4) = forces.operator()(3*offset_feet + 1);
+        this->curr_forces.operator()(5) = forces.operator()(3*offset_feet + 2);
+        offset_feet += 1;
+    }
+
+    if(this->stance_bl){
+        this->curr_forces.operator()(6) = forces.operator()(3*offset_feet + 0);
+        this->curr_forces.operator()(7) = forces.operator()(3*offset_feet + 1);
+        this->curr_forces.operator()(8) = forces.operator()(3*offset_feet + 2);
+        offset_feet += 1;
+    }
+
+    if(this->stance_br){
+        this->curr_forces.operator()(9)  = forces.operator()(3*offset_feet + 0);
+        this->curr_forces.operator()(10) = forces.operator()(3*offset_feet + 1);
+        this->curr_forces.operator()(11) = forces.operator()(3*offset_feet + 2);
+    }
+
+
+    std::cout << "FORCES" << std::endl;
+
+    for (int i=0; i <4; i++){
+        std::cout << this->curr_forces(3*i) << ", " << this->curr_forces(3*i + 1) << ", " << this->curr_forces(3*i + 2) << std::endl;
+    }
+    std::cout << "-----------------------" <<  std::endl;
+
+    */
+
+
+    //std::cout << std::endl;
+
+
+    /*
+    Q.operator=(   (A.transpose() * A).operator*(this->w_dyn_model) +
+                   Eigen::MatrixXf::Identity(3*num_feets, 3*num_feets).operator*(this->w_forces) +
+                   Eigen::MatrixXf::Identity(3*num_feets, 3*num_feets).operator*(this->w_prev_forces));
+
+    q.operator=(   - A.transpose().operator*(this->w_dyn_model) * B
+                   - prev_computed_forces.operator*(this->w_prev_forces)  );
+    */
+
+
+}
+
+
+
+
+
+
+
+
+
+void PredictiveModeController::computeForces(double current_main_phase){
+    Matrix13f    A, Adyn;
+    Matrix13x12f B, Bdyn;
+
+    Eigen::Vector3f ref_base_ang, ref_base_pos, ref_base_ang_vel, ref_base_vel;
+    Eigen::Vector3f feet_pos_fl, feet_pos_fr, feet_pos_bl, feet_pos_br;
+    Eigen::Vector3f feet_pos_fl_fromBase, feet_pos_fr_fromBase, feet_pos_bl_fromBase, feet_pos_br_fromBase;
+
+    bool stance_fl, stance_fr, stance_bl, stance_br;
+    int num_stance_feet, num_stance_feet_k0, offset_feet;
+
+
+
+    // Big matrices for QP optimisation
+    Eigen::MatrixXf Aqp(HORIZONT_K * DYN_STATE_DIM, DYN_STATE_DIM);
+    Eigen::MatrixXf Bqp(HORIZONT_K * DYN_STATE_DIM, HORIZONT_K * 4 * 3);
+    Eigen::MatrixXd Cqp(HORIZONT_K * 4 * 5,  HORIZONT_K * 4 * 3);
+    Eigen::MatrixXd D_MINqp(HORIZONT_K * 4 * 5, 1);
+    Eigen::MatrixXd D_MAXqp(HORIZONT_K * 4 * 5, 1);
+    Eigen::MatrixXd L(HORIZONT_K * DYN_STATE_DIM, HORIZONT_K * DYN_STATE_DIM); // weights dynamical model
+    L.setZero();
+
+    Aqp.setZero();
+    Bqp.setZero();
+    Cqp.setZero();
+    D_MINqp.setZero();
+    D_MAXqp.setZero();
+
+    // Get first mean yaw angle
+    float mean_yaw = 0;
+    for(int k=0; k<HORIZONT_K; k++) {
+        ref_base_ang     << this->state_ref(13*k),    this->state_ref(13*k + 1),  this->state_ref(13*k + 2);
+        mean_yaw +=  ref_base_ang.z();
+    }
+    mean_yaw = mean_yaw/HORIZONT_K;
+
+    Eigen::VectorXf xnext(DYN_STATE_DIM);
+
+    // Get first Adyn
+    //this->getAmatrix(mean_yaw, &A);
+    this->getAdynMatrix(mean_yaw, DELTAT, &Adyn);
+
+
+
+
+    for(int k=0; k<HORIZONT_K; k++) {
+        ref_base_ang     << this->state_ref(13*k),    this->state_ref(13*k + 1),  this->state_ref(13*k + 2);
+        ref_base_pos     << this->state_ref(13*k+3),  this->state_ref(13*k + 4),  this->state_ref(13*k + 5);
+        ref_base_ang_vel << this->state_ref(13*k+6),  this->state_ref(13*k + 7),  this->state_ref(13*k + 8);
+        ref_base_vel     << this->state_ref(13*k+9),  this->state_ref(13*k + 10), this->state_ref(13*k + 11);
+
+
+        //std::cout << "k = " << k <<  std::endl;
+        //std::cout << ref_base_pos.x() << " " << ref_base_pos.y() << " " << ref_base_pos.z() << std::endl;
+        //std::cout << xnext(3) << " " <<  xnext(4) << " " <<  xnext(5) << std::endl;
+        //std::cout << std::endl;
+
+        stance_fl = this->fl_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_fl);
+        stance_fr = this->fr_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_fr);
+        stance_bl = this->bl_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_bl);
+        stance_br = this->br_trajectory->predictFeetState(current_main_phase, (k+1)*DELTAT, ref_base_vel, &feet_pos_br);
+
+        this->kinematics->getFeetFromBody("fl", feet_pos_fl, &feet_pos_fl_fromBase);
+        this->kinematics->getFeetFromBody("fr", feet_pos_fr, &feet_pos_fr_fromBase);
+        this->kinematics->getFeetFromBody("bl", feet_pos_bl, &feet_pos_bl_fromBase);
+        this->kinematics->getFeetFromBody("br", feet_pos_br, &feet_pos_br_fromBase);
+
+        feet_pos_fl_fromBase = feet_pos_fl_fromBase + ref_base_pos;
+        feet_pos_fr_fromBase = feet_pos_fr_fromBase + ref_base_pos;
+        feet_pos_bl_fromBase = feet_pos_bl_fromBase + ref_base_pos;
+        feet_pos_br_fromBase = feet_pos_br_fromBase + ref_base_pos;
+
+        feet_pos_fl_fromBase(2) = 0;
+        feet_pos_fr_fromBase(2) = 0;
+        feet_pos_bl_fromBase(2) = 0;
+        feet_pos_br_fromBase(2) = 0;
+
+        //std::cout << feet_pos_fl_fromBase.x() << " " << feet_pos_fl_fromBase.y() << " " << feet_pos_fl_fromBase.z() << std::endl;
+        //std::cout << feet_pos_fr_fromBase.x() << " " << feet_pos_fr_fromBase.y() << " " << feet_pos_fr_fromBase.z() << std::endl;
+        //std::cout << feet_pos_bl_fromBase.x() << " " << feet_pos_bl_fromBase.y() << " " << feet_pos_bl_fromBase.z() << std::endl;
+        //std::cout << feet_pos_br_fromBase.x() << " " << feet_pos_br_fromBase.y() << " " << feet_pos_br_fromBase.z() << std::endl;
+
+        //xnext = Adyn.pow(k+1) * this->initial_state;
+
+        float yaw = ref_base_ang.z();
+        this->getBdynMatrix(yaw, DELTAT, feet_pos_fl_fromBase, feet_pos_fr_fromBase, feet_pos_bl_fromBase, feet_pos_br_fromBase, &Bdyn);
+        //this->getAdynAndBdynMatrices(DELTAT, A, B, &Adyn, &Bdyn);
+
+
+        Eigen::MatrixXf D_MIN(4*5, 1);
+        Eigen::MatrixXf D_MAX(4*5, 1);
+        Eigen::MatrixXf C(4*5, 4*3);
+        C.setZero();
+
+
+        C.block(0, 0, 5, 3)    = this->terrain_fl;
+        D_MIN.block(0,0, 5, 1) = this->d_min;
+        D_MAX.block(0,0, 5, 1) = this->d_max;
+
+        C.block(5, 3, 5, 3)    = this->terrain_fr;
+        D_MIN.block(5,0, 5, 1) = this->d_min;
+        D_MAX.block(5,0, 5, 1) = this->d_max;
+
+        C.block(5*2, 3*2, 5, 3)  = this->terrain_bl;
+        D_MIN.block(5*2,0, 5, 1) = this->d_min;
+        D_MAX.block(5*2,0, 5, 1) = this->d_max;
+
+        C.block(5*3, 3*3, 5, 3)  = this->terrain_br;
+        D_MIN.block(5*3,0, 5, 1) = this->d_min;
+        D_MAX.block(5*3,0, 5, 1) = this->d_max;
+
+
+
+        /**************** GET MATRICES FOR QP *********************/
+        Aqp.block(k*DYN_STATE_DIM, 0, DYN_STATE_DIM, DYN_STATE_DIM) = Adyn.pow(k+1);
+
+        for (int j=0; j < HORIZONT_K; j ++){
+            if(j == k){
+                Bqp.block(j*DYN_STATE_DIM, k * 4 * 3, DYN_STATE_DIM, 3 * 4) = Bdyn;
+            }
+            if (j > k){
+                Bqp.block(j*DYN_STATE_DIM, k * 4 * 3, DYN_STATE_DIM, 3 * 4) = Adyn.pow(j-k) * Bdyn;
+                //Bqp.block(j*DYN_STATE_DIM, 3 * forces_counter, DYN_STATE_DIM, 3 * num_stance_feet) = Adyn.pow(j-k) * Bdyn_red;
+            }
+        }
+
+
+        Cqp.block( k*4*5, k*4*3, 4*5, 4*3) = C.cast<double>();
+        D_MINqp.block( k*4*5, 0, 4*5, 1)   = D_MIN.cast<double>();
+        D_MAXqp.block( k*4*5, 0, 4*5, 1)   = D_MAX.cast<double>();
+
+        L.block(k*DYN_STATE_DIM, k*DYN_STATE_DIM, DYN_STATE_DIM, DYN_STATE_DIM) = this->w_dyn_model.cast<double>();
+    }
+
+
+    /*
+    for (int i=0; i <HORIZONT_K*4*5; i++){
+        for (int j=0; j <HORIZONT_K*4*3; j++) {
+            std::cout << Cqp(i,j) << " ";
+        }
+        std::cout << std::endl;
+    }
+    std::cout << std::endl;
+    */
+
+
+
+    Eigen::MatrixXd Q(HORIZONT_K*4*3, HORIZONT_K*4*3);
+    Eigen::VectorXd q(HORIZONT_K*4*3);
+
+    Q = 1*( (Bqp.transpose().cast<double>() * L * Bqp.cast<double>())
+            +  Eigen::MatrixXd::Identity(HORIZONT_K*4*3, HORIZONT_K*4*3) *this->w_forces);
+
+
+    q =  1* (Bqp.transpose().cast<double>()* L ) * ( Aqp.cast<double>() * this->initial_state.cast<double>() - this->state_ref.cast<double>() );
+
+    /*************************************************************/
+    /*
+    USING_NAMESPACE_QPOASES
+    SQProblem solve_qp(HORIZONT_K*4*3, HORIZONT_K*4*5);
+
+    const real_t* H = Q.data();
+    const real_t* g = q.data();
+    const real_t* K =   Cqp.data();
+    const real_t* lbK = D_MINqp.data();
+    const real_t* ubK = D_MAXqp.data();
+    const real_t* lb = NULL; //MIN_FORCE.data();
+    const real_t* ub = NULL; //MAX_FORCE.data();
+
+    int nWSR = 100;
+
+    returnValue hr;
+
+    hr = solve_qp.init(H,
+                       g,
+                       K,
+                       lb,
+                       ub,
+                       lbK,
+                       ubK,
+                       nWSR);
+
+    hr = solve_qp.hotstart(H,
+                       g,
+                       K,
+                       lb,
+                       ub,
+                       lbK,
+                       ubK,
+                       nWSR);
+
+
+    std::cout << "RETURN VAL " << hr << std::endl;
+
+
+    real_t xOpt[HORIZONT_K*4*3];
+    solve_qp.getPrimalSolution( xOpt );
+
+
+    real_t yOpt[HORIZONT_K*4*3 + HORIZONT_K*4*5];
+    solve_qp.getDualSolution( yOpt );
+
+
+    if(hr == 0){
+        std::cout << "FORCES" << std::endl;
+        for (int i=0; i <HORIZONT_K*4; i++){
+            std::cout << xOpt[3*i] << ", " << xOpt[3*i + 1] << ", " << xOpt[3*i + 2] << std::endl;
+        }
+        std::cout << "-----------------------" <<  std::endl;
+    }
+
+    */
+
+
+
+    Eigen::MatrixXd Cd_comp(2*4*5*HORIZONT_K, 4*3*HORIZONT_K);
+    Eigen::VectorXd D_comp(2*4*5*HORIZONT_K);
+
+
+    Cd_comp << Cqp, -Cqp;
+    D_comp  << -D_MINqp, D_MAXqp;
+
+
+
+
+    // Empty equality equations
+    Eigen::MatrixXd CE(3*4*HORIZONT_K, 0);
+    Eigen::VectorXd ce(0);
+
+    Eigen::VectorXd forces(3*4*HORIZONT_K);
+
+
+    QuadProgPP::solve_quadprog(Q,
+                               q,
+                               CE,
+                               ce,
+                               Cd_comp.transpose(), //
+                               D_comp,// D_MAXd,//
+                               forces);
+
+
+    for (int i=0; i <4*HORIZONT_K; i++){
+        std::cout << forces[3*i] << ", " << forces[3*i + 1] << ", " << forces[3*i + 2] << std::endl;
+    }
+    std::cout << "-----------------------" <<  std::endl;
+
+
+}

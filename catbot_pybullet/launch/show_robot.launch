@@ -1,0 +1,24 @@
+<launch>
+
+    <arg name="model" default ="$(find catbot_description)/urdf/catbot.urdf"/>
+    <param name="robot_description" textfile="$(arg model)" />
+
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+		<remap from="joint_states" to="/catbot/joints_state" />
+		<param name="rate" value="100"/>
+	</node>
+
+
+
+	<!-- send simulated joints state -->
+	<node name="catbot_pybullet" pkg="catbot_pybullet" type="catbot_pybullet_node.py" output = "screen"/>
+
+
+
+	<!-- Show in Rviz   -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find catbot_description)/rviz/catbot_visualization.rviz"/>
+
+
+
+</launch>

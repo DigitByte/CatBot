@@ -1,0 +1,30 @@
+[position 0]
+time_to_complete   = 2
+base_pos_x           = 0.02
+base_pos_y           = 0
+base_pos_z           = 0
+
+base_angle_roll  = 0
+base_angle_pitch = 0
+base_angle_yaw   = 0
+
+stance_fl = 0
+stance_fr = 0
+stance_bl = 0
+stance_br = 0
+
+feet_pos_fl_x = 0
+feet_pos_fl_y = 0.05
+feet_pos_fl_z = -0.1
+
+feet_pos_fr_x = 0
+feet_pos_fr_y = 0.05
+feet_pos_fr_z = -0.1
+
+feet_pos_bl_x = 0
+feet_pos_bl_y = 0.05
+feet_pos_bl_z = -0.1
+
+feet_pos_br_x = 0
+feet_pos_br_y = 0.05
+feet_pos_br_z = -0.1

@@ -1,0 +1,15 @@
+#request constants
+int32   servo_index
+bool    setCalibration_servo
+float32 min_calAngle
+float32 max_calAngle
+float32 min_posServo
+float32 max_posServo
+float32 min_posAngle
+float32 max_posAngle
+float32 min_lim_angle
+float32 max_lim_angle
+---
+#response constants
+bool result
+string info

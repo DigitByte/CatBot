@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP TEENSY_4.0
+D Teensy USB Board, Version 4.0
+K
+F https://www.pjrc.com/store/teensy40.html
+$ENDCMP
+#
+#End Doc Library

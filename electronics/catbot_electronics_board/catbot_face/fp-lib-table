@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name catbot_face)(type KiCad)(uri face)(options "")(descr ""))
+)

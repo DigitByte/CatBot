@@ -1,0 +1,917 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title "CatBot electronics board"
+Date ""
+Rev "v01"
+Comp "Damien"
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 "Author: Damien"
+$EndDescr
+$Comp
+L Connector:Conn_01x03_Male J4
+U 1 1 616C112F
+P 5000 5850
+F 0 "J4" V 5154 5662 50  0000 R CNN
+F 1 "leg_fl" V 5063 5662 50  0000 R CNN
+F 2 "catbot:leg_connector" H 5000 5850 50  0001 C CNN
+F 3 "~" H 5000 5850 50  0001 C CNN
+	1    5000 5850
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x03_Male J5
+U 1 1 616C4EE3
+P 6700 6150
+F 0 "J5" V 6762 6294 50  0000 L CNN
+F 1 "leg_fr" V 6853 6294 50  0000 L CNN
+F 2 "catbot:leg_connector" H 6700 6150 50  0001 C CNN
+F 3 "~" H 6700 6150 50  0001 C CNN
+	1    6700 6150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x03_Male J6
+U 1 1 616C6AFD
+P 7450 6150
+F 0 "J6" V 7512 6294 50  0000 L CNN
+F 1 "leg_br" V 7603 6294 50  0000 L CNN
+F 2 "catbot:leg_connector" H 7450 6150 50  0001 C CNN
+F 3 "~" H 7450 6150 50  0001 C CNN
+	1    7450 6150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J1
+U 1 1 616D6F77
+P 4250 4100
+F 0 "J1" H 4358 4381 50  0000 C CNN
+F 1 "imu_sensor" H 4358 4290 50  0000 C CNN
+F 2 "catbot:IMU_BNO080" H 4250 4100 50  0001 C CNN
+F 3 "~" H 4250 4100 50  0001 C CNN
+	1    4250 4100
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEENSY_4.0:TEENSY_4.0 IC1
+U 1 1 616DE488
+P 5700 5050
+F 0 "IC1" V 6704 5178 50  0000 L CNN
+F 1 "TEENSY_4.0" V 6795 5178 50  0000 L CNN
+F 2 "TEENSY_4.0:TEENSY40" H 7650 5150 50  0001 L CNN
+F 3 "https://www.pjrc.com/store/teensy40.html" H 7650 5050 50  0001 L CNN
+F 4 "Teensy USB Board, Version 4.0" H 7650 4950 50  0001 L CNN "Description"
+F 5 "4.64" H 7650 4850 50  0001 L CNN "Height"
+F 6 "Teensy" H 7650 4750 50  0001 L CNN "Manufacturer_Name"
+F 7 "TEENSY 4.0" H 7650 4650 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 7650 4550 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 7650 4450 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 7650 4350 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 7650 4250 50  0001 L CNN "Arrow Price/Stock"
+	1    5700 5050
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR06
+U 1 1 6171521B
+P 4300 5900
+F 0 "#PWR06" H 4300 5650 50  0001 C CNN
+F 1 "GND" H 4305 5727 50  0000 C CNN
+F 2 "" H 4300 5900 50  0001 C CNN
+F 3 "" H 4300 5900 50  0001 C CNN
+	1    4300 5900
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR08
+U 1 1 61728F63
+P 4700 4300
+F 0 "#PWR08" H 4700 4050 50  0001 C CNN
+F 1 "GND" V 4705 4172 50  0000 R CNN
+F 2 "" H 4700 4300 50  0001 C CNN
+F 3 "" H 4700 4300 50  0001 C CNN
+	1    4700 4300
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4700 4300 4450 4300
+Wire Wire Line
+	4450 4200 5000 4200
+Wire Wire Line
+	4450 4100 4900 4100
+Wire Wire Line
+	4450 4000 4800 4000
+$Comp
+L power:GND #PWR09
+U 1 1 616C95D5
+P 4700 5050
+F 0 "#PWR09" H 4700 4800 50  0001 C CNN
+F 1 "GND" V 4705 4922 50  0000 R CNN
+F 2 "" H 4700 5050 50  0001 C CNN
+F 3 "" H 4700 5050 50  0001 C CNN
+	1    4700 5050
+	0    1    1    0   
+$EndComp
+$Comp
+L B2P-VH:B2P-VH J3
+U 1 1 61770EFF
+P 4600 6000
+F 0 "J3" V 4846 6128 50  0000 L CNN
+F 1 "power fl" V 4937 6128 50  0000 L CNN
+F 2 "catbot:power_servos_connector" H 5250 6100 50  0001 L CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eVH.pdf" H 5250 6000 50  0001 L CNN
+F 4 "CONN HEADER VH TOP 2POS 3.96MM" H 5250 5900 50  0001 L CNN "Description"
+F 5 "9.4" H 5250 5800 50  0001 L CNN "Height"
+F 6 "JST (JAPAN SOLDERLESS TERMINALS)" H 5250 5700 50  0001 L CNN "Manufacturer_Name"
+F 7 "B2P-VH" H 5250 5600 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 5250 5500 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 5250 5400 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 5250 5300 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 5250 5200 50  0001 L CNN "Arrow Price/Stock"
+	1    4600 6000
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4600 6000 4600 5900
+Wire Wire Line
+	4500 6000 4300 6000
+Wire Wire Line
+	4300 6000 4300 5900
+$Comp
+L power:GND #PWR0101
+U 1 1 61780B84
+P 8250 5700
+F 0 "#PWR0101" H 8250 5450 50  0001 C CNN
+F 1 "GND" H 8255 5527 50  0000 C CNN
+F 2 "" H 8250 5700 50  0001 C CNN
+F 3 "" H 8250 5700 50  0001 C CNN
+	1    8250 5700
+	-1   0    0    1   
+$EndComp
+$Comp
+L B2P-VH:B2P-VH J9
+U 1 1 61780B98
+P 8550 5800
+F 0 "J9" V 8796 5928 50  0000 L CNN
+F 1 "power bl" V 8900 5950 50  0000 L CNN
+F 2 "catbot:power_servos_connector" H 9200 5900 50  0001 L CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eVH.pdf" H 9200 5800 50  0001 L CNN
+F 4 "CONN HEADER VH TOP 2POS 3.96MM" H 9200 5700 50  0001 L CNN "Description"
+F 5 "9.4" H 9200 5600 50  0001 L CNN "Height"
+F 6 "JST (JAPAN SOLDERLESS TERMINALS)" H 9200 5500 50  0001 L CNN "Manufacturer_Name"
+F 7 "B2P-VH" H 9200 5400 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 9200 5300 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 9200 5200 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 9200 5100 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 9200 5000 50  0001 L CNN "Arrow Price/Stock"
+	1    8550 5800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8550 5800 8550 5700
+Wire Wire Line
+	8450 5800 8250 5800
+Wire Wire Line
+	8250 5800 8250 5700
+$Comp
+L power:GND #PWR0103
+U 1 1 61786A39
+P 8550 1550
+F 0 "#PWR0103" H 8550 1300 50  0001 C CNN
+F 1 "GND" H 8555 1377 50  0000 C CNN
+F 2 "" H 8550 1550 50  0001 C CNN
+F 3 "" H 8550 1550 50  0001 C CNN
+	1    8550 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L B2P-VH:B2P-VH J8
+U 1 1 61786A4D
+P 8250 1450
+F 0 "J8" V 8588 1222 50  0000 R CNN
+F 1 "power br" V 8497 1222 50  0000 R CNN
+F 2 "catbot:power_servos_connector" H 8900 1550 50  0001 L CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eVH.pdf" H 8900 1450 50  0001 L CNN
+F 4 "CONN HEADER VH TOP 2POS 3.96MM" H 8900 1350 50  0001 L CNN "Description"
+F 5 "9.4" H 8900 1250 50  0001 L CNN "Height"
+F 6 "JST (JAPAN SOLDERLESS TERMINALS)" H 8900 1150 50  0001 L CNN "Manufacturer_Name"
+F 7 "B2P-VH" H 8900 1050 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 8900 950 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 8900 850 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 8900 750 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 8900 650 50  0001 L CNN "Arrow Price/Stock"
+	1    8250 1450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	8250 1450 8250 1550
+Wire Wire Line
+	8350 1450 8550 1450
+Wire Wire Line
+	8550 1450 8550 1550
+$Comp
+L power:GND #PWR0105
+U 1 1 61791BE1
+P 4800 1650
+F 0 "#PWR0105" H 4800 1400 50  0001 C CNN
+F 1 "GND" H 4805 1477 50  0000 C CNN
+F 2 "" H 4800 1650 50  0001 C CNN
+F 3 "" H 4800 1650 50  0001 C CNN
+	1    4800 1650
+	1    0    0    -1  
+$EndComp
+$Comp
+L B2P-VH:B2P-VH J2
+U 1 1 61791BF5
+P 4500 1550
+F 0 "J2" V 4838 1322 50  0000 R CNN
+F 1 "power fr" V 4747 1322 50  0000 R CNN
+F 2 "catbot:power_servos_connector" H 5150 1650 50  0001 L CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eVH.pdf" H 5150 1550 50  0001 L CNN
+F 4 "CONN HEADER VH TOP 2POS 3.96MM" H 5150 1450 50  0001 L CNN "Description"
+F 5 "9.4" H 5150 1350 50  0001 L CNN "Height"
+F 6 "JST (JAPAN SOLDERLESS TERMINALS)" H 5150 1250 50  0001 L CNN "Manufacturer_Name"
+F 7 "B2P-VH" H 5150 1150 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 5150 1050 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 5150 950 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 5150 850 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 5150 750 50  0001 L CNN "Arrow Price/Stock"
+	1    4500 1550
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4500 1550 4500 1650
+Wire Wire Line
+	4600 1550 4800 1550
+Wire Wire Line
+	4800 1550 4800 1650
+$Comp
+L Connector:Conn_01x03_Male J7
+U 1 1 616C272B
+P 6200 5800
+F 0 "J7" V 6354 5612 50  0000 R CNN
+F 1 "leg_bl" V 6263 5612 50  0000 R CNN
+F 2 "catbot:leg_connector" H 6200 5800 50  0001 C CNN
+F 3 "~" H 6200 5800 50  0001 C CNN
+	1    6200 5800
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	4900 5650 4900 5300
+Wire Wire Line
+	4900 5300 5800 5300
+Wire Wire Line
+	5800 5300 5800 5050
+Wire Wire Line
+	4700 5050 5700 5050
+Wire Wire Line
+	5900 5050 5900 5350
+Wire Wire Line
+	5900 5350 5000 5350
+Wire Wire Line
+	5000 5350 5000 5650
+Wire Wire Line
+	5100 5400 6000 5400
+Wire Wire Line
+	6000 5400 6000 5050
+Wire Wire Line
+	6100 5050 6100 5600
+Wire Wire Line
+	6200 5600 6200 5050
+Wire Wire Line
+	6300 5050 6300 5600
+Wire Wire Line
+	6600 5950 6600 5850
+Wire Wire Line
+	6600 5850 6400 5850
+Wire Wire Line
+	6400 5850 6400 5050
+Wire Wire Line
+	6700 5950 6700 5800
+Wire Wire Line
+	6700 5800 6500 5800
+Wire Wire Line
+	6500 5800 6500 5050
+Wire Wire Line
+	6600 5050 6600 5750
+Wire Wire Line
+	6600 5750 6800 5750
+Wire Wire Line
+	6800 5750 6800 5950
+Wire Wire Line
+	7350 5650 6700 5650
+Wire Wire Line
+	6700 5650 6700 5050
+Wire Wire Line
+	6800 5050 6800 5600
+Wire Wire Line
+	6800 5600 7450 5600
+Wire Wire Line
+	7450 5600 7450 5950
+Wire Wire Line
+	7550 5950 7550 5550
+Wire Wire Line
+	7550 5550 6900 5550
+Wire Wire Line
+	6900 5550 6900 5050
+Wire Wire Line
+	7350 5650 7350 5950
+Wire Wire Line
+	7200 5050 7200 5500
+Wire Wire Line
+	7200 5500 7900 5500
+Wire Wire Line
+	7900 5500 7900 2450
+Wire Wire Line
+	7900 2450 4800 2450
+Wire Wire Line
+	4800 2450 4800 4000
+Wire Wire Line
+	4900 2700 6400 2700
+Wire Wire Line
+	4900 2700 4900 4100
+Wire Wire Line
+	5000 2750 5000 4200
+Wire Wire Line
+	5100 5400 5100 5650
+Wire Wire Line
+	6000 2850 6000 2950
+Wire Wire Line
+	6500 2750 6500 2950
+Wire Wire Line
+	6400 2700 6400 2950
+$Comp
+L power:GND #PWR0102
+U 1 1 618D1DDA
+P 7300 5050
+F 0 "#PWR0102" H 7300 4800 50  0001 C CNN
+F 1 "GND" H 7305 4877 50  0000 C CNN
+F 2 "" H 7300 5050 50  0001 C CNN
+F 3 "" H 7300 5050 50  0001 C CNN
+	1    7300 5050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0104
+U 1 1 618D2FE3
+P 7300 2950
+F 0 "#PWR0104" H 7300 2700 50  0001 C CNN
+F 1 "GND" H 7305 2777 50  0000 C CNN
+F 2 "" H 7300 2950 50  0001 C CNN
+F 3 "" H 7300 2950 50  0001 C CNN
+	1    7300 2950
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR0106
+U 1 1 618D389B
+P 7100 2950
+F 0 "#PWR0106" H 7100 2700 50  0001 C CNN
+F 1 "GND" H 7105 2777 50  0000 C CNN
+F 2 "" H 7100 2950 50  0001 C CNN
+F 3 "" H 7100 2950 50  0001 C CNN
+	1    7100 2950
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x03_Male J10
+U 1 1 61EF1C07
+P 4000 2950
+F 0 "J10" V 4062 3094 50  0000 L CNN
+F 1 "relay_entry" V 4153 3094 50  0000 L CNN
+F 2 "catbot:relay" H 4000 2950 50  0001 C CNN
+F 3 "~" H 4000 2950 50  0001 C CNN
+	1    4000 2950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5000 2750 6500 2750
+$Comp
+L B2P-VH:B2P-VH J14
+U 1 1 61F324BD
+P 9650 4650
+F 0 "J14" V 9896 4778 50  0000 L CNN
+F 1 "power_battery" H 10000 4800 50  0000 L CNN
+F 2 "catbot:power_servos_connector" H 10300 4750 50  0001 L CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eVH.pdf" H 10300 4650 50  0001 L CNN
+F 4 "CONN HEADER VH TOP 2POS 3.96MM" H 10300 4550 50  0001 L CNN "Description"
+F 5 "9.4" H 10300 4450 50  0001 L CNN "Height"
+F 6 "JST (JAPAN SOLDERLESS TERMINALS)" H 10300 4350 50  0001 L CNN "Manufacturer_Name"
+F 7 "B2P-VH" H 10300 4250 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 10300 4150 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 10300 4050 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 10300 3950 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 10300 3850 50  0001 L CNN "Arrow Price/Stock"
+	1    9650 4650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C1
+U 1 1 61F34E45
+P 9250 4700
+F 0 "C1" H 9368 4746 50  0000 L CNN
+F 1 "CP" H 9368 4655 50  0000 L CNN
+F 2 "Capacitor_THT:CP_Radial_D14.0mm_P5.00mm" H 9288 4550 50  0001 C CNN
+F 3 "~" H 9250 4700 50  0001 C CNN
+	1    9250 4700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9250 4550 9650 4550
+Wire Wire Line
+	9650 4550 9650 4650
+Wire Wire Line
+	9650 4750 9650 4950
+Wire Wire Line
+	9650 4950 9250 4950
+Wire Wire Line
+	9250 4950 9250 4850
+$Comp
+L power:VCC #PWR0107
+U 1 1 61F3D044
+P 8950 4550
+F 0 "#PWR0107" H 8950 4400 50  0001 C CNN
+F 1 "VCC" V 8965 4677 50  0000 L CNN
+F 2 "" H 8950 4550 50  0001 C CNN
+F 3 "" H 8950 4550 50  0001 C CNN
+	1    8950 4550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR0108
+U 1 1 61F3D8B5
+P 8900 4950
+F 0 "#PWR0108" H 8900 4700 50  0001 C CNN
+F 1 "GND" V 8905 4822 50  0000 R CNN
+F 2 "" H 8900 4950 50  0001 C CNN
+F 3 "" H 8900 4950 50  0001 C CNN
+	1    8900 4950
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9250 4950 8900 4950
+Connection ~ 9250 4950
+Wire Wire Line
+	9250 4550 8950 4550
+Connection ~ 9250 4550
+$Comp
+L Connector:Conn_01x04_Male J12
+U 1 1 61F4C10E
+P 9600 1900
+F 0 "J12" H 9708 2181 50  0000 C CNN
+F 1 "5v_transformer" H 9708 2090 50  0000 C CNN
+F 2 "catbot:catbot_5v_transformer" H 9600 1900 50  0001 C CNN
+F 3 "~" H 9600 1900 50  0001 C CNN
+	1    9600 1900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0109
+U 1 1 61F4DBAC
+P 10200 1800
+F 0 "#PWR0109" H 10200 1650 50  0001 C CNN
+F 1 "+5V" V 10215 1928 50  0000 L CNN
+F 2 "" H 10200 1800 50  0001 C CNN
+F 3 "" H 10200 1800 50  0001 C CNN
+	1    10200 1800
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR0110
+U 1 1 61F4E337
+P 10200 1950
+F 0 "#PWR0110" H 10200 1700 50  0001 C CNN
+F 1 "GND" V 10205 1822 50  0000 R CNN
+F 2 "" H 10200 1950 50  0001 C CNN
+F 3 "" H 10200 1950 50  0001 C CNN
+	1    10200 1950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:VCC #PWR0111
+U 1 1 61F4ED96
+P 10200 2100
+F 0 "#PWR0111" H 10200 1950 50  0001 C CNN
+F 1 "VCC" V 10215 2228 50  0000 L CNN
+F 2 "" H 10200 2100 50  0001 C CNN
+F 3 "" H 10200 2100 50  0001 C CNN
+	1    10200 2100
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	10200 2100 9800 2100
+Wire Wire Line
+	9800 2000 10200 2000
+Wire Wire Line
+	10200 2000 10200 1950
+Wire Wire Line
+	9800 1900 10200 1900
+Wire Wire Line
+	10200 1900 10200 1950
+Connection ~ 10200 1950
+Wire Wire Line
+	10200 1800 9800 1800
+$Comp
+L power:VCC #PWR0112
+U 1 1 61F56011
+P 9850 3200
+F 0 "#PWR0112" H 9850 3050 50  0001 C CNN
+F 1 "VCC" H 9865 3373 50  0000 C CNN
+F 2 "" H 9850 3200 50  0001 C CNN
+F 3 "" H 9850 3200 50  0001 C CNN
+	1    9850 3200
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+3.3V #PWR0114
+U 1 1 61F5F91F
+P 9900 2850
+F 0 "#PWR0114" H 9900 2700 50  0001 C CNN
+F 1 "+3.3V" H 9915 3023 50  0000 C CNN
+F 2 "" H 9900 2850 50  0001 C CNN
+F 3 "" H 9900 2850 50  0001 C CNN
+	1    9900 2850
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4200 2850 6000 2850
+$Comp
+L power:+3.3V #PWR0116
+U 1 1 61F702D2
+P 4450 2950
+F 0 "#PWR0116" H 4450 2800 50  0001 C CNN
+F 1 "+3.3V" V 4465 3078 50  0000 L CNN
+F 2 "" H 4450 2950 50  0001 C CNN
+F 3 "" H 4450 2950 50  0001 C CNN
+	1    4450 2950
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4450 2950 4200 2950
+$Comp
+L power:GND #PWR0117
+U 1 1 61F72A29
+P 4200 3250
+F 0 "#PWR0117" H 4200 3000 50  0001 C CNN
+F 1 "GND" H 4205 3077 50  0000 C CNN
+F 2 "" H 4200 3250 50  0001 C CNN
+F 3 "" H 4200 3250 50  0001 C CNN
+	1    4200 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4200 3250 4200 3050
+$Comp
+L power:+7.5V #PWR0118
+U 1 1 61F799E6
+P 8550 5700
+F 0 "#PWR0118" H 8550 5550 50  0001 C CNN
+F 1 "+7.5V" H 8565 5873 50  0000 C CNN
+F 2 "" H 8550 5700 50  0001 C CNN
+F 3 "" H 8550 5700 50  0001 C CNN
+	1    8550 5700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+7.5V #PWR0119
+U 1 1 61F7AF8D
+P 4600 5900
+F 0 "#PWR0119" H 4600 5750 50  0001 C CNN
+F 1 "+7.5V" H 4615 6073 50  0000 C CNN
+F 2 "" H 4600 5900 50  0001 C CNN
+F 3 "" H 4600 5900 50  0001 C CNN
+	1    4600 5900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+7.5V #PWR0120
+U 1 1 61F7C526
+P 4500 1650
+F 0 "#PWR0120" H 4500 1500 50  0001 C CNN
+F 1 "+7.5V" H 4515 1823 50  0000 C CNN
+F 2 "" H 4500 1650 50  0001 C CNN
+F 3 "" H 4500 1650 50  0001 C CNN
+	1    4500 1650
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+7.5V #PWR0121
+U 1 1 61F7DE93
+P 8250 1550
+F 0 "#PWR0121" H 8250 1400 50  0001 C CNN
+F 1 "+7.5V" H 8265 1723 50  0000 C CNN
+F 2 "" H 8250 1550 50  0001 C CNN
+F 3 "" H 8250 1550 50  0001 C CNN
+	1    8250 1550
+	-1   0    0    1   
+$EndComp
+$Comp
+L B2P-VH:B2P-VH J15
+U 1 1 61F82AEF
+P 9650 5550
+F 0 "J15" V 9896 5678 50  0000 L CNN
+F 1 "power servos" H 10000 5700 50  0000 L CNN
+F 2 "catbot:power_servos_connector" H 10300 5650 50  0001 L CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eVH.pdf" H 10300 5550 50  0001 L CNN
+F 4 "CONN HEADER VH TOP 2POS 3.96MM" H 10300 5450 50  0001 L CNN "Description"
+F 5 "9.4" H 10300 5350 50  0001 L CNN "Height"
+F 6 "JST (JAPAN SOLDERLESS TERMINALS)" H 10300 5250 50  0001 L CNN "Manufacturer_Name"
+F 7 "B2P-VH" H 10300 5150 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 10300 5050 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 10300 4950 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 10300 4850 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 10300 4750 50  0001 L CNN "Arrow Price/Stock"
+	1    9650 5550
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+7.5V #PWR0122
+U 1 1 61F850C1
+P 9650 5550
+F 0 "#PWR0122" H 9650 5400 50  0001 C CNN
+F 1 "+7.5V" V 9665 5678 50  0000 L CNN
+F 2 "" H 9650 5550 50  0001 C CNN
+F 3 "" H 9650 5550 50  0001 C CNN
+	1    9650 5550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR0123
+U 1 1 61F85956
+P 9650 5650
+F 0 "#PWR0123" H 9650 5400 50  0001 C CNN
+F 1 "GND" H 9655 5477 50  0000 C CNN
+F 2 "" H 9650 5650 50  0001 C CNN
+F 3 "" H 9650 5650 50  0001 C CNN
+	1    9650 5650
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6600 2950 6600 2100
+Wire Wire Line
+	6700 2100 6700 2950
+Wire Wire Line
+	6800 2950 6800 2100
+Wire Wire Line
+	6900 2100 6900 2950
+$Comp
+L Connector:Conn_01x04_Male J11
+U 1 1 61F0E593
+P 6800 1900
+F 0 "J11" V 6862 2044 50  0000 L CNN
+F 1 "conn_leg_switch" V 6953 2044 50  0000 L CNN
+F 2 "catbot:switch_connector" H 6800 1900 50  0001 C CNN
+F 3 "~" H 6800 1900 50  0001 C CNN
+	1    6800 1900
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:Conn_01x02_Male J17
+U 1 1 61F12510
+P 6050 1050
+F 0 "J17" V 6204 862 50  0000 R CNN
+F 1 "3.3v_switch_fl" V 6113 862 50  0000 R CNN
+F 2 "catbot:switch_power" H 6050 1050 50  0001 C CNN
+F 3 "~" H 6050 1050 50  0001 C CNN
+	1    6050 1050
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:Conn_01x02_Male J18
+U 1 1 61F1DA05
+P 6550 1050
+F 0 "J18" V 6704 862 50  0000 R CNN
+F 1 "in_Vcc" V 6613 862 50  0000 R CNN
+F 2 "catbot:switch_power" H 6550 1050 50  0001 C CNN
+F 3 "~" H 6550 1050 50  0001 C CNN
+	1    6550 1050
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:Conn_01x02_Male J19
+U 1 1 61F1FA10
+P 7000 1050
+F 0 "J19" V 7154 862 50  0000 R CNN
+F 1 "in_Vcc" V 7063 862 50  0000 R CNN
+F 2 "catbot:switch_power" H 7000 1050 50  0001 C CNN
+F 3 "~" H 7000 1050 50  0001 C CNN
+	1    7000 1050
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector:Conn_01x02_Male J20
+U 1 1 61F21B9F
+P 7550 1050
+F 0 "J20" V 7704 862 50  0000 R CNN
+F 1 "in_Vcc" V 7613 862 50  0000 R CNN
+F 2 "catbot:switch_power" H 7550 1050 50  0001 C CNN
+F 3 "~" H 7550 1050 50  0001 C CNN
+	1    7550 1050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5650 1350 6050 1350
+Wire Wire Line
+	7550 1350 7550 1250
+Wire Wire Line
+	7000 1250 7000 1350
+Connection ~ 7000 1350
+Wire Wire Line
+	7000 1350 7550 1350
+Wire Wire Line
+	6550 1250 6550 1350
+Connection ~ 6550 1350
+Wire Wire Line
+	6550 1350 7000 1350
+Connection ~ 6050 1350
+Wire Wire Line
+	6050 1350 6550 1350
+Wire Wire Line
+	6050 1250 6050 1350
+$Comp
+L power:+3.3V #PWR0124
+U 1 1 61F3E6F4
+P 5650 1350
+F 0 "#PWR0124" H 5650 1200 50  0001 C CNN
+F 1 "+3.3V" V 5665 1478 50  0000 L CNN
+F 2 "" H 5650 1350 50  0001 C CNN
+F 3 "" H 5650 1350 50  0001 C CNN
+	1    5650 1350
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	7450 1500 7450 1250
+Wire Wire Line
+	6900 1250 6900 1500
+Connection ~ 6900 1500
+Wire Wire Line
+	6900 1500 7450 1500
+Wire Wire Line
+	6450 1250 6450 1500
+Connection ~ 6450 1500
+Wire Wire Line
+	6450 1500 6900 1500
+Connection ~ 5950 1500
+Wire Wire Line
+	5950 1500 6450 1500
+Wire Wire Line
+	5950 1250 5950 1500
+$Comp
+L power:GND #PWR0125
+U 1 1 61F4CEF9
+P 5600 1500
+F 0 "#PWR0125" H 5600 1250 50  0001 C CNN
+F 1 "GND" V 5605 1372 50  0000 R CNN
+F 2 "" H 5600 1500 50  0001 C CNN
+F 3 "" H 5600 1500 50  0001 C CNN
+	1    5600 1500
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5600 1500 5950 1500
+$Comp
+L Connector:Conn_01x04_Male J13
+U 1 1 61F94827
+P 9150 3100
+F 0 "J13" V 9212 3244 50  0000 L CNN
+F 1 "3.3v transformer" V 9303 3244 50  0000 L CNN
+F 2 "catbot:transformer_3.3v" H 9150 3100 50  0001 C CNN
+F 3 "~" H 9150 3100 50  0001 C CNN
+	1    9150 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9350 3200 9850 3200
+$Comp
+L power:GND #PWR0113
+U 1 1 61FB2097
+P 9450 3500
+F 0 "#PWR0113" H 9450 3250 50  0001 C CNN
+F 1 "GND" H 9455 3327 50  0000 C CNN
+F 2 "" H 9450 3500 50  0001 C CNN
+F 3 "" H 9450 3500 50  0001 C CNN
+	1    9450 3500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9350 3100 9450 3100
+Wire Wire Line
+	9450 3100 9450 3300
+Wire Wire Line
+	9350 3300 9450 3300
+Connection ~ 9450 3300
+Wire Wire Line
+	9450 3300 9450 3500
+Wire Wire Line
+	9350 3000 9900 3000
+Wire Wire Line
+	9900 3000 9900 2850
+$Comp
+L B2P-VH:B2P-VH J16
+U 1 1 61FEA0B8
+P 9650 3950
+F 0 "J16" V 9896 4078 50  0000 L CNN
+F 1 "power_raspi" H 10000 4100 50  0000 L CNN
+F 2 "catbot:power_servos_connector" H 10300 4050 50  0001 L CNN
+F 3 "http://www.jst-mfg.com/product/pdf/eng/eVH.pdf" H 10300 3950 50  0001 L CNN
+F 4 "CONN HEADER VH TOP 2POS 3.96MM" H 10300 3850 50  0001 L CNN "Description"
+F 5 "9.4" H 10300 3750 50  0001 L CNN "Height"
+F 6 "JST (JAPAN SOLDERLESS TERMINALS)" H 10300 3650 50  0001 L CNN "Manufacturer_Name"
+F 7 "B2P-VH" H 10300 3550 50  0001 L CNN "Manufacturer_Part_Number"
+F 8 "" H 10300 3450 50  0001 L CNN "Mouser Part Number"
+F 9 "" H 10300 3350 50  0001 L CNN "Mouser Price/Stock"
+F 10 "" H 10300 3250 50  0001 L CNN "Arrow Part Number"
+F 11 "" H 10300 3150 50  0001 L CNN "Arrow Price/Stock"
+	1    9650 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0115
+U 1 1 61FEA0C4
+P 9650 4050
+F 0 "#PWR0115" H 9650 3800 50  0001 C CNN
+F 1 "GND" H 9655 3877 50  0000 C CNN
+F 2 "" H 9650 4050 50  0001 C CNN
+F 3 "" H 9650 4050 50  0001 C CNN
+	1    9650 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR0126
+U 1 1 61FEF957
+P 9650 3950
+F 0 "#PWR0126" H 9650 3800 50  0001 C CNN
+F 1 "+5V" V 9665 4078 50  0000 L CNN
+F 2 "" H 9650 3950 50  0001 C CNN
+F 3 "" H 9650 3950 50  0001 C CNN
+	1    9650 3950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector:Conn_01x04_Male J21
+U 1 1 61F0CC86
+P 8400 2650
+F 0 "J21" H 8508 2931 50  0000 C CNN
+F 1 "leds_status" H 8508 2840 50  0000 C CNN
+F 2 "catbot:LED_STATUS" H 8400 2650 50  0001 C CNN
+F 3 "~" H 8400 2650 50  0001 C CNN
+	1    8400 2650
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR0127
+U 1 1 61F11242
+P 8200 2850
+F 0 "#PWR0127" H 8200 2600 50  0001 C CNN
+F 1 "GND" H 8205 2677 50  0000 C CNN
+F 2 "" H 8200 2850 50  0001 C CNN
+F 3 "" H 8200 2850 50  0001 C CNN
+	1    8200 2850
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:VCC #PWR0128
+U 1 1 61F3DFCE
+P 8500 3350
+F 0 "#PWR0128" H 8500 3200 50  0001 C CNN
+F 1 "VCC" H 8515 3523 50  0000 C CNN
+F 2 "" H 8500 3350 50  0001 C CNN
+F 3 "" H 8500 3350 50  0001 C CNN
+	1    8500 3350
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8500 3350 8500 2850
+$Comp
+L power:+7.5V #PWR0129
+U 1 1 61F44130
+P 8250 3350
+F 0 "#PWR0129" H 8250 3200 50  0001 C CNN
+F 1 "+7.5V" H 8265 3523 50  0000 C CNN
+F 2 "" H 8250 3350 50  0001 C CNN
+F 3 "" H 8250 3350 50  0001 C CNN
+	1    8250 3350
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8250 3350 8250 3150
+Wire Wire Line
+	8250 3150 8400 3150
+Wire Wire Line
+	8400 3150 8400 2850
+Wire Wire Line
+	8300 3050 8300 2850
+Wire Wire Line
+	7700 3050 7700 2550
+Wire Wire Line
+	7700 2550 6100 2550
+Wire Wire Line
+	6100 2550 6100 2950
+Wire Wire Line
+	7700 3050 8300 3050
+$EndSCHEMATC

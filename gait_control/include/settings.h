@@ -1,0 +1,83 @@
+//
+// Created by andres on 13.10.20.
+//
+
+#ifndef SRC_SETTINGS_H
+#define SRC_SETTINGS_H
+
+
+#define ROBOT_TOTAL_MASS 2.573   // kg
+#define ROBOT_INERTIA_XX 0.025
+#define ROBOT_INERTIA_YY 0.1
+#define ROBOT_INERTIA_ZZ 0.1
+#define ROBOT_INERTIA_XY 0.0
+#define ROBOT_INERTIA_XZ 0.0
+#define ROBOT_INERTIA_YZ 0.0
+
+
+
+#define PUBLISH_FREQ_CONTROL 120
+#define PUBLISH_FREQ_VIS     30
+
+
+#define BODY_OFFSET_X 0.0
+#define BODY_OFFSET_Y 0.000
+#define BODY_INITIAL_POS_Z 0.15
+
+#define BODY_INITIAL_ROLL  0
+#define BODY_INITIAL_PITCH 0
+#define BODY_INITIAL_YAW   0
+
+#define OFFSET_FEET_X 0
+#define OFFSET_FEET_Y 0.04
+
+#define FORCE_CONTAT_THRESHOLD 5;
+
+#define MIN_BASE_VELOCITY_FOR_REACTION 0.3
+
+#define CAPTURE_POINT_FACTOR_VELOCITY  0.1
+
+
+#define FORCE_CONTROLLER_K_BASE_POSITION 0//0.01
+#define FORCE_CONTROLLER_K_BASE_VELOCITY 0//1000
+
+#define FORCE_CONTROLLER_K_BASE_ANGLES           5000
+#define FORCE_CONTROLLER_K_BASE_ANGULAR_VELOCITY 1000
+
+#define FORCE_CONTROLLER_MODEL_WEIGHT 0.9
+#define FORCE_CONTROLLER_FORCE_REGULARIZATION 0.9
+#define FORCE_CONTROLLER_PREV_FORCE_REGULARIZATION 0.5
+
+#define MIN_FEET_FORCE 0
+#define MAX_FEET_FORCE 60
+/********************* predictive model controller ********************/
+// #define HORIZON 10
+// #define DELTAT 0.1
+#define USE_QPOASES 0
+
+
+/*********** state estimation ***************/
+#define STD_FEET_STANCE 0.000001
+#define STD_FEET_SWING  100000
+
+#define STD_FEET_VEL_REL_STANCE  1
+#define STD_FEET_VEL_REL_SWING   1000000
+
+#define STD_FEET_POS_REL_STANCE  0.0
+#define STD_FEET_POS_REL_SWING   1
+
+#define STD_LIN_ACC_X 0.5//10000.5
+#define STD_LIN_ACC_Y 0.5//10000.5
+#define STD_LIN_ACC_Z 0.5//10000.5
+
+#define STD_FEET_HEIGHT_STANCE   0.000001
+#define STD_FEET_HEIGHT_SWING    1000000
+# endif //SRC_SETTINGS_H
+
+
+/************** SAFETY ***************/
+#define MAX_ROLL_TO_DISCONNECT_MOTORS 0.8
+#define MAX_PITCH_TO_DISCONNECT_MOTORS 0.8
+
+
+

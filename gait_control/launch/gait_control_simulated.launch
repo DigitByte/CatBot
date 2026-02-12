@@ -1,0 +1,28 @@
+<launch>
+
+     <arg name="model" default ="$(find catbot_description)/urdf/catbot.urdf"/>
+    <param name="robot_description" textfile="$(arg model)" />
+    <param name="urdf_path"  value="$(find catbot_description)/urdf/catbot.urdf" />
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+		<remap from="joint_states" to="/catbot/joints_control" />
+		<param name="rate" value="100"/>
+	</node>
+
+
+	<node name="catbot_pybullet" pkg="catbot_pybullet" type="catbot_pybullet_node.py" output = "screen"/>
+
+
+
+	<node name="manual_control" pkg="catbot_visualization" type="manual_velocity_control.py" output = "screen"/>
+    <node name="catbot_visualization" pkg="catbot_visualization" type="catbot_visualization_node.py"/>
+
+
+	<!-- Show in Rviz   -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find catbot_description)/rviz/catbot_ik_body.rviz"/>
+
+	<node name="gait_control" pkg="gait_control" type="gait_control" output = "screen"/>
+
+
+
+</launch>

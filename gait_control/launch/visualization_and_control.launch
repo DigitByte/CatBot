@@ -1,0 +1,19 @@
+<launch>
+    <param name="robot_name"  value="catbot" />
+
+    <arg name="model" default ="$(find catbot_description)/urdf/catbot.urdf"/>
+    <param name="robot_description" textfile="$(arg model)" />
+
+
+
+
+
+	<node name="manual_control" pkg="catbot_visualization" type="manual_velocity_control.py" output = "screen"/>
+    <node name="catbot_visualization" pkg="catbot_visualization" type="catbot_visualization_node.py"/>
+
+
+	<!-- Show in Rviz   -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find catbot_description)/rviz/catbot_ik_body.rviz"/>
+
+
+</launch>

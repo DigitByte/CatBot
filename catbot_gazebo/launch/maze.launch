@@ -1,0 +1,12 @@
+<launch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+     <arg name="world_name" value="$(find catbot_gazebo)/worlds/maze.world"/>
+
+    <!-- more default parameters can be changed here -->
+  </include>
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-file $(find catbot_description)/urdf/catbot.urdf -urdf -z 0.25 -model catbot" />
+
+
+</launch>

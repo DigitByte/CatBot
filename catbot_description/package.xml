@@ -1,0 +1,24 @@
+<package> 
+  <name>catbot_description</name>
+  <version>0.0.1</version>
+
+  <description>URDF and mesh assets for the CatBot robot model</description>
+  <author>Damien</author>
+
+  <maintainer email="drdelgado9@outlook.com">Damien</maintainer>
+
+  <license>BSD</license>  
+  <url></url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>urdf</build_depend>
+
+  <run_depend>urdf</run_depend>
+  <run_depend>joint_state_publisher</run_depend>
+  <run_depend>pr2_description</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>rviz</run_depend>
+  <run_depend>xacro</run_depend>
+
+</package>

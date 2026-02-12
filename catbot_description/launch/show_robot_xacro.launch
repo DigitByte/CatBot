@@ -1,0 +1,23 @@
+<launch>
+    <param name="robot_description"
+    command="$(find xacro)/xacro --inorder '$(find catbot_description)/urdf/catbot_model _gazebo_test.xacro'" />
+
+
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher">
+		<remap from="joint_states" to="/catbot/joints_state" />
+		<param name="rate" value="100"/>
+	</node>
+
+
+
+	<node name="catbot_drivers" pkg="catbot_drivers" type="catbot_drivers_sim_node.py" output="screen" />
+
+
+
+	  <!-- Show in Rviz   -->
+	  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find catbot_description)/rviz/show_model.rviz"/>
+
+
+
+</launch>

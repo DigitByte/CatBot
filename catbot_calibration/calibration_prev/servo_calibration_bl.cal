@@ -1,0 +1,15 @@
+# Servo calibration data for CatBot 
+
+# leg bl
+# hip1
+     calAngles:      0.00, 45.00
+     servoPositions: 1940.00, 1390.00
+     angleValues:    1940.00, 1390.00
+# hip2
+     calAngles:      0.00, 45.00
+     servoPositions: 2260.00, 1710.00
+     angleValues:    2260.00, 1710.00
+# knee
+     calAngles:      -45.00, -135.00
+     servoPositions: 2170.00, 770.00
+     angleValues:    2170.00, 770.00
