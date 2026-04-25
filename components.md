@@ -1,8 +1,8 @@
-# CatBot components
+# CatBot Components
 
 This list covers the core hardware used in the CatBot build. Use it as a reference for labs, prototypes, or a full build.
 
-# Core components
+## Core Components
 
 | Component | Quantity | Purpose |
 | --- | --- | --- |
@@ -28,20 +28,20 @@ This list covers the core hardware used in the CatBot build. Use it as a referen
 | BNO080 IMU | 1 | Motion and orientation sensing |
 | Hall effect sensor | 4 | Foot contact sensing |
 
-# Face components
+## Face Components
 
 | Component | Quantity | Purpose |
 | --- | --- | --- |
 | Teensy 4.0 | 1 | Display control |
 | 128x64 SSH1106 OLED | 2 | Eye animation |
 
-# Navigation components
+## Navigation Components
 
 | Component | Quantity | Purpose |
 | --- | --- | --- |
 | YDLIDAR X2L | 1 | 2D ranging and mapping |
 | Raspberry Pi Camera 2.0 | 1 | Vision experiments |
 
-# Price and sourcing
-Check the price list in `price_list.ods` for vendor examples. A full build is roughly 1000 EUR, with the motors as the largest cost driver. You can substitute lower-cost motors for prototypes, but performance may vary.
+## Price and Sourcing
 
+Check the price list in `price_list.ods` for vendor examples. A full build is roughly 1000 EUR, with the motors as the largest cost driver. You can substitute lower-cost motors for prototypes, but performance may vary.

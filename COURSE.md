@@ -2,7 +2,19 @@
 
 This course is structured around the learning flow in the provided HTML notes: spatial description, kinematics, Jacobians, dynamics, trajectory generation, and control. Each week pairs theory with hands-on work in this repository.
 
-# Why robotics\nRobotics blends mechanics, electronics, and software into systems that can sense, decide, and act. This course focuses on the core ideas that make that possible, and uses CatBot as a concrete, testable platform.\n\n## How to succeed\n- Read the short theory notes before lab.\n- Run the notebooks to confirm the math with numbers.\n- Test each change in simulation before hardware.\n- Keep a lab log of what you tried and what you observed.\n\n## Course goals
+## Why Robotics
+
+Robotics blends mechanics, electronics, and software into systems that can sense, decide, and act. This course focuses on the core ideas that make that possible, and uses CatBot as a concrete, testable platform.
+
+## How to Succeed
+
+- Read the short theory notes before lab.
+- Run the notebooks to confirm the math with numbers.
+- Test each change in simulation before hardware.
+- Keep a lab log of what you tried and what you observed.
+
+## Course Goals
+
 - Explain and use coordinate frames, rotations, and transforms
 - Derive forward and inverse kinematics for a legged robot
 - Use Jacobians to connect joint motion to end-effector motion
@@ -11,13 +23,14 @@ This course is structured around the learning flow in the provided HTML notes: s
 - Implement feedback control and test it in simulation
 - Integrate sensing and navigation for basic autonomy
 
-# How to use this repository
+## How to Use This Repository
+
 - Read the week plan below before each lab.
 - Use the notebooks for math practice and quick experiments.
 - Use the ROS packages for simulation and real-time testing.
 - Keep notes in your own lab notebook or report template.
 
-# Weekly plan
+## Weekly Plan
 
 | Week | Focus | Practice | Repo resources |
 | --- | --- | --- | --- |
@@ -34,7 +47,8 @@ This course is structured around the learning flow in the provided HTML notes: s
 | 11 | Navigation | 2D mapping and navigation basics | `catbot_2dnav`, `catbot_gazebo` |
 | 12 | Capstone | Demonstrate a behavior or project of your choice | All packages |
 
-# Assessment ideas
+## Assessment Ideas
+
 - Weekly labs or quizzes
 - Midterm: kinematics and Jacobian application
 - Final project: a motion or autonomy demo using CatBot

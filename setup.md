@@ -2,13 +2,14 @@
 
 You can run all course labs without a physical robot. The simulation stack works on a standard computer with ROS.
 
-# Recommended: ROS Noetic (current)
+## Recommended: ROS Noetic
+
 This is the primary environment for the course. It has been tested on Ubuntu 20.04 LTS and newer.
 
 1. Install Anaconda3:
    https://www.anaconda.com/
 
-2. Clone the repository (GitHub URL pending):
+2. Clone the repository:
    `git clone https://github.com/DigitByte/CatBot catbot`
 
 3. Create the ROS environment from the provided file:
@@ -24,13 +25,14 @@ This is the primary environment for the course. It has been tested on Ubuntu 20.
    http://wiki.ros.org/catkin/Tutorials/create_a_workspace
 
 7. Move the CatBot folder into the workspace `src` directory:
-   `mv ~/catbot/ YOUR-CATKIN-WORKSPACE/src/catbot`
+   `mv ~/catbot ~/YOUR-CATKIN-WORKSPACE/src/catbot`
 
 8. Build the workspace:
    `cd ~/YOUR-CATKIN-WORKSPACE/`
    `catkin_make`
 
-# Legacy: ROS Melodic (deprecated)
+## Legacy: ROS Melodic
+
 This branch is kept for historical reference and older Ubuntu versions. Use ROS Noetic if possible.
 
 1. Install ROS Melodic:
@@ -47,7 +49,8 @@ This branch is kept for historical reference and older Ubuntu versions. Use ROS 
    `cd ..`
    `catkin_make`
 
-# Run the simulation
+## Run the Simulation
+
 1. Launch the test file:
    `roslaunch gait_control gait_control_test.launch`
 
@@ -59,7 +62,8 @@ This branch is kept for historical reference and older Ubuntu versions. Use ROS 
 4. Use the control terminal keys to move the robot:
    `w`, `a`, `s`, `d`, `q`, `e`
 
-# PS5 controller (wireless)
+## PS5 Controller
+
 CatBot can be driven with a DualSense/PS5 controller using the gamepad node.
 
 1. Find your controller device path:
@@ -73,17 +77,18 @@ CatBot can be driven with a DualSense/PS5 controller using the gamepad node.
    See `CONTROLLER_MAPPING.md` for the default layout.
    For a student-friendly summary, see `CONTROLLER_CHEATSHEET.md`.
 
-# Hardware setup (optional)
+## Hardware Setup
+
 If you are building the physical CatBot, you will need a Teensy 4.0 and a BNO080 IMU.
 
 1. Copy Arduino libraries:
-   `cp -r /catbot/arduino/libraries/ ~/Arduino/libraries/`
+   `cp -r ~/YOUR-CATKIN-WORKSPACE/src/catbot/arduino/libraries/ ~/Arduino/libraries/`
 
 2. Install Teensyduino:
    https://www.pjrc.com/teensy/teensyduino.html
 
 3. Upload the firmware from:
-   `/catbot/arduino/catbot_arduino/`
+   `~/YOUR-CATKIN-WORKSPACE/src/catbot/arduino/catbot_arduino/`
 
 4. Launch the hardware control stack:
    `roslaunch gait_control gait_control_with_visualization.launch`
@@ -92,4 +97,4 @@ If you see `rosserial` errors, install it:
 `sudo apt install ros-noetic-rosserial`
 
 If you see a serial port error, update the port in:
-`/catbot/catbot_calibration/launch/connect_teensy.launch`
+`~/YOUR-CATKIN-WORKSPACE/src/catbot/catbot_calibration/launch/connect_teensy.launch`
