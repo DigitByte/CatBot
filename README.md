@@ -16,26 +16,6 @@ The software stack is the primary focus of this repository. Hardware kits, repla
 - Navigation, lidar, and vision packages for perception experiments.
 - Notebooks, handouts, and course documents for guided learning.
 
-## Repository Layout
-
-```text
-CatBot/
-├── gait_control/           core gait and control workflows
-├── catbot_description/     URDF and robot model assets
-├── catbot_visualization/   visualization and teleoperation helpers
-├── catbot_calibration/     servo and hardware calibration tools
-├── catbot_pybullet/        PyBullet simulation package
-├── catbot_gazebo/          Gazebo simulation package
-├── catbot_2dnav/           2D navigation experiments
-├── catbot_lidar/           lidar integration
-├── catbot_vision/          camera and vision experiments
-├── catbot_msgs/            custom ROS messages
-├── arduino/                embedded support for physical hardware
-├── electronics/            electronics references and assets
-├── notebooks/              computational notebooks and exercises
-├── handouts/               course handouts and supporting material
-└── *.md                    setup, course, hardware, and instructor docs
-```
 
 ## Key Documents
 
@@ -55,7 +35,7 @@ CatBot/
 4. Launch the simulation with `roslaunch gait_control gait_control_test.launch`.
 5. Change gait profiles from a second terminal with `rosservice call /catbot/set_gait "gait_filename: 'diagonal_fast'"`.
 
-Detailed setup instructions, controller mapping, and hardware bring-up are documented in [setup.md](./setup.md).
+
 
 ## Platform Coverage
 
